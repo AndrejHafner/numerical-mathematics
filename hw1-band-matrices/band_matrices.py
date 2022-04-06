@@ -1,6 +1,8 @@
+from functools import partial
 from typing import Tuple, Union
 
 import numpy as np
+import operator
 
 class IndexException(Exception):
     pass
@@ -102,9 +104,41 @@ class BandMatrix:
         assert self.band_width == other.band_width, f"Band matrix band width mismatch: {self.band_width} != {other.band_width}"
         return BandMatrix.from_diags(self.main_diag - other.main_diag, self.lower_diags - other.lower_diags, self.upper_diags - other.upper_diags)
 
-    # def __mul__(self, other):
-    #     return BandMatrix.from_diags(self.main_diag - other.main_diag, self.lower_diags - other.lower_diags, self.upper_diags - other.upper_diags)
+    def __mul_div(self, other, operation=None):
+        assert any([isinstance(other, _type) for _type in [self.__class__, float, int]]), "cannot multiply with types other than BandMatrix, int or float"
 
+        if isinstance(other, self.__class__):
+            assert self.shape == other.shape, f"Band matrix shape mismatch: {self.shape} != {other.shape}"
+            assert self.band_width == other.band_width, f"Band matrix band width mismatch: {self.band_width} != {other.band_width}"
+            return BandMatrix.from_diags(operation(self.main_diag, other.main_diag),
+                                         operation(self.lower_diags, other.lower_diags),
+                                         operation(self.upper_diags, other.upper_diags))
+        elif isinstance(other, int) or isinstance(other, float):
+            main_diag = operation(self.main_diag, other)
+            lower_diags = operation(self.lower_diags, other)
+            upper_diags = operation(self.upper_diags, other)
+            return BandMatrix.from_diags(main_diag, lower_diags, upper_diags)
+
+    def __mul__(self, other):
+        return self.__mul_div(other, operation=operator.mul)
+
+    def __rmul__(self, other):
+        return self.__mul_div(other, operation=operator.mul)
+
+    def __truediv__(self, other):
+        return self.__mul_div(other, operation=operator.truediv)
+
+    def __rtruediv__(self, other):
+        return self.__mul_div(other, operation=operator.truediv)
+
+    def __floordiv__(self, other):
+        return self.__mul_div(other, operation=operator.floordiv)
+
+    def __rfloordiv__(self, other):
+        return self.__mul_div(other, operation=operator.floordiv)
+
+
+    # def __matmul__(self, other):
 
     def __len__(self):
         return self.__shape[0]
@@ -135,6 +169,35 @@ class BandMatrix:
 
         return band_mat
 
+    @staticmethod
+    def from_np_matrix(mat: np.ndarray, band_width: int):
+        assert len(mat.shape) == 2, "numpy.ndarray is not a matrix"
+        assert mat.shape[0] == mat.shape[1], "numpy.ndarray is not a square matrix"
+        assert band_width % 2 == 1, "band_width is not an odd number"
+        assert band_width >= 0, "band_width is a negative number"
+
+        # Check whether the given matrix is really a band matrix
+        n_side_diags = (band_width - 1) // 2
+        n = mat.shape[0]
+        test_mat = np.ones(mat.shape)
+
+        np.fill_diagonal(test_mat, 0)
+        for i in range(1, n_side_diags + 1):
+            test_mat -= np.diag(np.ones(n - i), k=-i)
+            test_mat -= np.diag(np.ones(n - i), k=i)
+
+        assert np.sum(mat * test_mat) == 0, "np.ndarray is not a band matrix with the given band_width"
+
+        main_diag = np.diag(mat)
+        lower_diags = np.zeros((n_side_diags, n - 1))
+        upper_diags = np.zeros((n_side_diags, n - 1))
+        for i in range(1, n_side_diags + 1):
+            lower_diags[i - 1, :(n - i)] = np.diag(mat, k=-i)
+            upper_diags[i - 1, :(n - i)] = np.diag(mat, k=i)
+
+        return BandMatrix.from_diags(main_diag, lower_diags, upper_diags)
+
+
 
 if __name__ == '__main__':
     n = 5
@@ -151,3 +214,14 @@ if __name__ == '__main__':
     print(a)
     print(b)
     print(a + b)
+
+    mat = np.diag(np.ones(7))
+    mat[3,2] = 1
+    mat[4,3] = 5
+    mat[5,6] = 10
+    mat[0,2] = 2
+    mat[1,2] = 8
+    mat[6,6] = 8
+    mat[4,6] = 8
+    band_mat = BandMatrix.from_np_matrix(mat, 5)
+    print(np.array_equal(mat, band_mat.to_np_matrix()))
