@@ -137,8 +137,57 @@ class BandMatrix:
     def __rfloordiv__(self, other):
         return self.__mul_div(other, operation=operator.floordiv)
 
+    def __matmul__(self, other):
+        assert isinstance(other, np.ndarray), "Item on the right is not a np.ndarray"
+        assert len(other.shape) <= 2, "Item on the right is not a vector"
 
-    # def __matmul__(self, other):
+        if len(other.shape) == 2:
+            assert min(other.shape) == 1, "Item on the right is not a vector"
+            other = other.squeeze() # We want to work with 1D vectors
+
+        assert len(other) == self.shape[1], "Matrix and vector dimensions don't match"
+
+        result = np.zeros_like(other)
+
+
+        diagonals = np.zeros((self.__band_width, len(self)))
+        diagonals[self.__n_side_diags, :] = self.main_diag
+        diagonals[:self.__n_side_diags, :-1] = np.flip(self.upper_diags, axis=0)
+        diagonals[self.__n_side_diags + 1:, 1:] = self.lower_diags
+
+
+        for i in range(self.__n_side_diags, len(diagonals)):
+            diagonals[i] = np.roll(diagonals[i], -(self.__n_side_diags - i + 1))
+
+        diagonals = np.flip(diagonals, axis=0)
+
+        for i in range(diagonals.shape[1]):
+            if i < self.__n_side_diags:
+                result[i] = diagonals[self.__n_side_diags - i:, i] @ other[:diagonals.shape[0] - (self.__n_side_diags - i)]
+            elif i < diagonals.shape[1] - self.__n_side_diags:
+                result[i] = diagonals[:, i].squeeze() @ other[i - self.__n_side_diags:i + diagonals.shape[0] - self.__n_side_diags]
+            else:
+                el1 = diagonals[:diagonals.shape[0] - (self.__n_side_diags - (diagonals.shape[1] - i) + 1), i].squeeze()
+                el2 = other[i - (self.__n_side_diags):]
+                result[i] = el1 @ el2
+
+        np_mat = self.to_np_matrix()
+
+        return result
+
+        # # Multiply the first (n_side diags + 1) rows
+        # result[0] = np.concatenate([np.array([self.main_diag[0]]), self.upper_diags[:, 0].squeeze()]) @ other[:(1 + self.__n_side_diags)]
+        #
+        # # Roll lower diagonals to allow for easier calculation
+        # lower_diags_rolled = self.lower_diags.copy()
+        # for i in range(1, self.__n_side_diags):
+        #     lower_diags_rolled[i] = np.roll(lower_diags_rolled[i], -i)
+        #
+        # # Multiply the rows that don't include all lower diagonals
+        # for i in range(1, self.__n_side_diags + 1):
+        #     result[i] = np.concatenate([np.array(lower_diags_rolled[:i, i-1]), np.array([self.main_diag[0]]), self.upper_diags[:, i].squeeze()]) @ other[:(1 + self.__n_side_diags + i)]
+        #
+
 
     def __len__(self):
         return self.__shape[0]

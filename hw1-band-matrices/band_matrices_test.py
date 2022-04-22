@@ -10,6 +10,7 @@ def get_diag_matrices():
     mat[4, 3] = 5
     mat[5, 6] = 10
     mat[4, 6] = 8
+    mat[5, 3] = -4
     band_mat_1 = mat.copy()
     mat[5, 5] = 22
     mat[1, 0] = 4
@@ -53,7 +54,12 @@ class BandMatricesTest(unittest.TestCase):
         assert np.array_equal(band_div_scalar_r.to_np_matrix(), mat1 / 5)
 
     def test_matmul(self):
-        pass
+        mat1, mat2, band_width = get_diag_matrices()
+        band1, band2 = BandMatrix.from_np_matrix(mat1, band_width), BandMatrix.from_np_matrix(mat2, band_width)
+        vec = np.arange(7)
+        res1 = band1 @ vec
+        res_true = mat1 @ vec
+        assert np.array_equal(res1, res_true)
 
 
 if __name__ == '__main__':
