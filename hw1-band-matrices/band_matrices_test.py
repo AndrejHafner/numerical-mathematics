@@ -92,14 +92,14 @@ class BandMatricesTest(unittest.TestCase):
         for band_width in range(1, 18, 2):
             matrix = gen_rand_band_matrix(n, band_width)
             band_matrix = BandMatrix.from_np_matrix(matrix, band_width)
-            band_matrix._BandMatrix__is_diagonally_dominant = MagicMock(return_value=True)
+            band_matrix.is_diagonally_dominant = MagicMock(return_value=True)
             L, U = band_matrix.lu()
             assert np.allclose(matrix, L.to_np_matrix() @ U.to_np_matrix())
 
     def test_left_divide(self):
         mat = gen_rand_band_matrix(20, 13)
         band_mat = BandMatrix.from_np_matrix(mat, 13)
-        band_mat._BandMatrix__is_diagonally_dominant = MagicMock(return_value=True)
+        band_mat.is_diagonally_dominant = MagicMock(return_value=True)
         x = np.random.randint(1, 20, 20)
         b = mat @ x
         x_sol = band_mat.left_divide(b)
@@ -110,7 +110,7 @@ class BandMatricesTest(unittest.TestCase):
         mat = gen_rand_band_matrix(20, 13)
         band_mat = BandMatrix.from_np_matrix(mat, 13)
         lower_mat = LowerBandMatrix.from_diags(band_mat.main_diag, band_mat.lower_diags)
-        lower_mat._LowerBandMatrix__is_diagonally_dominant = MagicMock(return_value=True)
+        lower_mat.is_diagonally_dominant = MagicMock(return_value=True)
         x = np.random.randint(1, 20, 20)
         b = lower_mat @ x
         x_sol = lower_mat.left_divide(b)
@@ -121,7 +121,7 @@ class BandMatricesTest(unittest.TestCase):
         mat = gen_rand_band_matrix(20, 13)
         band_mat = BandMatrix.from_np_matrix(mat, 13)
         upper_mat = UpperBandMatrix.from_diags(band_mat.main_diag, band_mat.upper_diags)
-        upper_mat._UpperBandMatrix__is_diagonally_dominant = MagicMock(return_value=True)
+        upper_mat.is_diagonally_dominant = MagicMock(return_value=True)
         x = np.random.randint(1, 20, 20)
         b = upper_mat @ x
         x_sol = upper_mat.left_divide(b)
