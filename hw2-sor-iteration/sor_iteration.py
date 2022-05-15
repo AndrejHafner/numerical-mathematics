@@ -100,3 +100,61 @@ class SparseMatrix:
             np_arr[i, self.I[i, col_indices]] = col_values
 
         return np_arr
+
+def gen_rand_band_matrix(n, band_width):
+    mat = np.zeros((n, n))
+    side_diags = (band_width - 1) // 2
+    for i in range(n):
+        for j in range(max(0, i - side_diags), min(n, i + side_diags + 1)):
+            mat[i][j] = np.random.randint(0, 20)
+
+    return mat
+
+def sor_np(A, b, x0, omega, tol=1e-10):
+    x_k = x0.copy()
+    iteration = 0
+
+    while np.linalg.norm(A @ x_k  - b, ord=np.inf) >= tol:
+        iteration += 1
+
+        for i in range(len(x_k)):
+            x_k[i] = (1 - omega) * x_k[i] +  (omega / A[i, i]) * (b[i] - A[i, :i] @ x_k[:i] - A[i, i+1:] @ x_k[i+1:])
+
+        norm = np.linalg.norm(A @ x_k  - b, ord=np.inf)
+        print(f"NP Iteration: {iteration}, max. norm: {norm}")
+
+    return iteration, x_k
+
+def sor(A, b, x0, omega, tol=1e-10):
+
+    assert isinstance(A, SparseMatrix), "A is not an instance of SparseMatrix"
+
+    x_k = x0.copy()
+    it = 0
+
+    while np.linalg.norm(A @ x_k - b, ord=np.inf) >= tol:
+        it += 1
+
+        for i in range(len(x_k)):
+            s1_A_row = np.zeros(i)
+            s1_A_I_indices = A.I[i, :] < i
+            s1_A_I_col_indices = A.I[i, s1_A_I_indices]
+            s1_A_row[s1_A_I_col_indices] = A.V[i, s1_A_I_indices]
+            s1 = s1_A_row @ x_k[:i]
+
+            s2_A_row = np.zeros(len(x_k) - i - 1)
+            s2_A_I_indices = A.I[i, :] > i
+            s2_A_I_col_indices = A.I[i, s2_A_I_indices]
+            s2_A_row[s2_A_I_col_indices - i - 1] = A.V[i, s2_A_I_indices]
+            s2 = s2_A_row @ x_k[i+1:]
+
+            x_k[i] = (1 - omega) * x_k[i] +  (omega / A[i, i]) * (b[i] - s1 - s2)
+
+    return x_k, it
+
+
+def main():
+    pass
+
+if __name__ == '__main__':
+    main()

@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from sor_iteration import SparseMatrix
+from sor_iteration import SparseMatrix, sor
 
 
 class SORIterationTest(unittest.TestCase):
@@ -61,4 +61,18 @@ class SORIterationTest(unittest.TestCase):
         res_sparse = sparse_mat @ vec
 
         assert np.array_equal(res_np, res_sparse)
+
+    def test_sparse_matrix_sor(self):
+        A = np.array([[10., 4., 0, 0.],
+                      [2., 11., -1., 0],
+                      [0, -2., 10., -3.],
+                      [0., 0, 6, 8.]])
+
+        x = np.arange(4) * 2 + 1
+        b = A @ x
+
+        x_sol, _ = sor(SparseMatrix.from_np(A), b, np.random.random(size=4), 0.8)
+
+        assert np.allclose(x, x_sol)
+
 
