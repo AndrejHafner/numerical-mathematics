@@ -17,5 +17,7 @@ This process is repeated 50 times in order to obtain the uncertainty of our esti
 Below we show the mean of SOR convergence speed (number of iterations) at different omega values with 95% confidence interval in light blue.
 We can see that the convergence speed increases with larger values of omega and that different A matrices have little to no effect on the convergence speed, as seen from the very small 95% confidence interval.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AndrejHafner/numerical-mathematics/hw2-sor-iteration/hw2-sor-iteration/images/sor_conv_speed.png" />
+</p>
 
-![](https://raw.githubusercontent.com/AndrejHafner/numerical-mathematics/hw2-sor-iteration/hw2-sor-iteration/images/sor_conv_speed.png)
