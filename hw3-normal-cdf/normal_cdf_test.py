@@ -1,8 +1,13 @@
 import unittest
-from normal_cdf import normal_cdf
+from normal_cdf import normal_cdf, adaptive_simpson
+import numpy as np
 
 
 class TestNormalCDF(unittest.TestCase):
+
+    def test_adaptive_simpson(self):
+        eps = 1e-10
+        assert adaptive_simpson(np.sin, 0, np.pi) - -(np.cos(np.pi) - np.cos(0)) < eps
 
     def test_normal_cdf_half(self):
         eps = 1e-10
