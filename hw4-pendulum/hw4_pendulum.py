@@ -65,13 +65,13 @@ def compare_math_harmonic_pendulum():
     l = 2
     t = 10
     init_angle = 0
-    init_speed = 3.5
+    init_speed = 0.3
     n = 300
     t_eval = np.linspace(0, t, n)
 
     math_angle, math_speed = pendulum(l, t, init_angle, init_speed, n)
     harm_angle, harm_speed = pendulum(l, t, init_angle, init_speed, n, harmonic=True)
-    animate_math_and_harm_pend(t, t_eval, l, math_angle, math_speed, harm_angle, harm_speed, filename="harm_math_pendulum_comparison_large_angle")
+    animate_math_and_harm_pend(t, t_eval, l, math_angle, math_speed, harm_angle, harm_speed, filename="harm_math_pendulum_comparison_small_angle")
 
 
 def main():
