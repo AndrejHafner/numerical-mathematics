@@ -7,8 +7,17 @@ where $g$ is the acceleration due to Earth's gravity and $l$ is the length of th
 The differential equation is solved using the method Runge-Kutta of the 4th order.
 
 Below we show the pendulum swinging and show its angle and angular speed through time.
-
 ![](./images/pendulum.gif)
+
+Next, we compare the simple pendulum with the harmonic pendulum (harmonic oscillator), which has a simple solution under the restriction that the 
+size of the oscillation's amplitude is much less than 1 radian. 
+
+Under the assumption that
+$$\Theta \ll 1, $$
+we can use the small-angle approximation for sine function
+$$sin \Theta \approx \theta,$$
+which yields the equation for harmonic oscillator,
+$$\frac{g}{l}\Theta(t) + \Theta''(t) = 0. $$
 
 ![](./images/harm_math_pendulum_comparison_small_angle.gif)
 
