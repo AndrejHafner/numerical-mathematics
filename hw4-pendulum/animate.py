@@ -4,6 +4,9 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 
 def animate_pendulum(t, t_eval, l, angle, speed):
+    """
+    Animate the movement of the pendulum.
+    """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
     ax2.axis([0, t, min(min(angle), min(speed)) - 3, max(max(angle), max(speed)) + 3])
 
@@ -21,8 +24,10 @@ def animate_pendulum(t, t_eval, l, angle, speed):
         ax1.axis([-1.5*l, 1.5*l, -1.5*l, 1.5*l])
 
 
-
 def animate_math_and_harm_pend(t, t_eval, l, angle_math, speed_math, angle_harm, speed_harm, filename="harm_math_pendulum_comparison"):
+    """
+    Animate the combined movement of the simple pendulum and the harmonic oscillator with the same starting conditions. Creates a GIF of the animation.
+    """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
 
     def animate(i):
@@ -50,7 +55,11 @@ def animate_math_and_harm_pend(t, t_eval, l, angle_math, speed_math, angle_harm,
     ani = FuncAnimation(fig, animate, interval=interval, blit=True, repeat=True, frames=len(t_eval))
     ani.save(f"{filename}.gif", dpi=300, writer=PillowWriter(fps=fps))
 
+
 def create_gif(t, t_eval, l, angle, speed, filename="pendulum"):
+    """
+    Create a GIF of an animation given the speed and angles of the pendulum movement.
+    """
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
 
