@@ -1,6 +1,6 @@
 # Homework 4 - Simple pendulum
 
-In the fourth homework we implemented a simple undamped pendulum. 
+In the fourth homework we implemented a simple undamped pendulum (mathematic pendulum). 
 Its angle $\theta(t)$ is defined with the differential equation
 $$\frac{g}{l}sin(\theta(t)) + \theta''(t) = 0 $$
 where $g$ is the acceleration due to Earth's gravity and $l$ is the length of the pendulum. 
@@ -12,16 +12,23 @@ Below we show the pendulum swinging and show its angle and angular speed through
 Next, we compare the simple pendulum with the harmonic pendulum (harmonic oscillator), which has a simple solution under the restriction that the 
 size of the oscillation's amplitude is much less than 1 radian. 
 
-Under the assumption that,
+Under the small angle assumption that,
 $$\theta \ll 1, $$
 we can use the small-angle approximation for sine function,
 $$sin(\theta) \approx \theta,$$
 which yields the equation for harmonic oscillator,
 $$\frac{g}{l}\theta(t) + \theta''(t) = 0. $$
 
+The simple pendulum and harmonic oscillator are compared in the setting where the small angle assumption is satisfied.
+The initial angle and angular speed is the same for both pendulums.
 ![](./images/harm_math_pendulum_comparison_small_angle.gif)
+We can see that the pendulums act the same and that their speed and angle in equal in the defined timeframe (speed and angle curves overlap for each pendulum).
 
+In the next example the small angle assumption is broken.
 ![](./images/harm_math_pendulum_comparison_large_angle.gif)
+Although both pendulums have equal initial conditions, their further behavior starts to differ quickly. The most obvious difference can be 
+seen at the points where the pendulum angular speed becomes 0 and it swings into the other direction. The harmonic oscillator stops quicker and swings 
+in the other direction much faster, looking rather unnatural compared to the simple pendulum.
 
 ![](./images/energy_period_plot.png)
 
