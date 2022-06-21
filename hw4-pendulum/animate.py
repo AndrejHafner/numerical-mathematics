@@ -60,8 +60,8 @@ def create_gif(t, t_eval, l, angle, speed, filename="pendulum"):
         ax1.axis([-1.5 * l, 1.5 * l, -1.5 * l, 1.5 * l])
         ax2.axis([0, t, min(min(angle), min(speed)) - 2, max(max(angle), max(speed)) + 2])
         l1, = ax1.plot([0, l * np.sin(angle[i])], [0, -l * np.cos(angle[i])], color="black")
-        l2, = ax1.plot(l * np.sin(angle[i]), -l * np.cos(angle[i]), ".", markersize=30)
-        l3, = ax2.plot(t_eval[:i], angle[:i], '-', color='b', label="Angle")
+        l2, = ax1.plot(l * np.sin(angle[i]), -l * np.cos(angle[i]), ".", markersize=30 ,color="cornflowerblue")
+        l3, = ax2.plot(t_eval[:i], angle[:i], '-', color='cornflowerblue', label="Angle")
         l4, = ax2.plot(t_eval[:i], speed[:i], '-', color='orange', label="Speed")
         ax2.legend()
 

@@ -26,7 +26,7 @@ def pendulum(l, t, theta0, dtheta0, n, harmonic=False):
         pend_system_fun = lambda t_, y: np.array([y[1], -G/l * np.sin(y[0])])
     t_eval = np.linspace(0, t, n)
     sol = rk4(pend_system_fun, np.array([theta0, dtheta0]), t_eval)
-
+    create_gif(t, t_eval, l, sol[:, 0], sol[:, 1])
     return sol[:, 0], sol[:, 1]
 
 def plot_period_dependence_on_energy():
@@ -75,9 +75,9 @@ def compare_math_harmonic_pendulum():
 
 
 def main():
-    compare_math_harmonic_pendulum()
+    # compare_math_harmonic_pendulum()
     # plot_period_dependence_on_energy()
-    # pendulum(1, 3, 0, 1, 150)
+    pendulum(1.5, 5, 0, 2.5, 150)
 
 if __name__ == '__main__':
     main()
