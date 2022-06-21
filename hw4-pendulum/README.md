@@ -35,6 +35,7 @@ in the other direction much faster, looking rather unnatural compared to the sim
 Finally, we analyze the period and how it changes with different initial conditions. The period depends on the initial speed which 
 defines its rotational energy. In our experiment, we assume that the pendulum has a weight of 1kg and find the periods at different initial velocities.
 ![](./images/energy_period_plot.png)
+
 We can see that the period increases "exponentially" (very spread out) with respect to the initial rotational energy. Further values were not computed since the pendulum starts spinning around the attachment point. 
 Since the movement is not damped this goes on infinitely, therefore the period becomes infinite (if such a system is still a pendulum, which is probably not true).
 
