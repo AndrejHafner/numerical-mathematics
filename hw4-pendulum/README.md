@@ -15,7 +15,7 @@ size of the oscillation's amplitude is much less than 1 radian.
 Under the assumption that,
 $$\theta \ll 1, $$
 we can use the small-angle approximation for sine function,
-$$sin \theta \approx \theta,$$
+$$sin(\theta) \approx \theta,$$
 which yields the equation for harmonic oscillator,
 $$\frac{g}{l}\theta(t) + \theta''(t) = 0. $$
 
