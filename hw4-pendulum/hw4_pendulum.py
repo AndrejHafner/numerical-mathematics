@@ -26,8 +26,11 @@ def pendulum(l, t, theta0, dtheta0, n, harmonic=False):
         pend_system_fun = lambda t_, y: np.array([y[1], -G/l * np.sin(y[0])])
     t_eval = np.linspace(0, t, n)
     sol = rk4(pend_system_fun, np.array([theta0, dtheta0]), t_eval)
-    create_gif(t, t_eval, l, sol[:, 0], sol[:, 1])
     return sol[:, 0], sol[:, 1]
+
+def nihalo(l, t, theta0, dtheta0, n):
+    angles, _ = pendulum(l, t, theta0, dtheta0, n)
+    return angles[-1, 0]
 
 def plot_period_dependence_on_energy():
     m = 1 # Assume a mass of 1kg on the pendulum
