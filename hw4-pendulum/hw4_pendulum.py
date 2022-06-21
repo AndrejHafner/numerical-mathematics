@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from animate import animate_pendulum, create_gif
+from animate import animate_pendulum, create_gif, animate_math_and_harm_pend
 
 G = 9.80665
 
@@ -19,8 +19,11 @@ def rk4(f, y0, t):
 
     return y
 
-def pendulum(l, t, theta0, dtheta0, n):
-    pend_system_fun = lambda t_, y: np.array([y[1], -G/l * np.sin(y[0])])
+def pendulum(l, t, theta0, dtheta0, n, harmonic=False):
+    if harmonic:
+        pend_system_fun = lambda t_, y: np.array([y[1], -G/l * y[0]])
+    else:
+        pend_system_fun = lambda t_, y: np.array([y[1], -G/l * np.sin(y[0])])
     t_eval = np.linspace(0, t, n)
     sol = rk4(pend_system_fun, np.array([theta0, dtheta0]), t_eval)
 
@@ -58,8 +61,22 @@ def plot_period_dependence_on_energy():
     plt.show()
 
 
+def compare_math_harmonic_pendulum():
+    l = 2
+    t = 10
+    init_angle = 0
+    init_speed = 3.5
+    n = 300
+    t_eval = np.linspace(0, t, n)
+
+    math_angle, math_speed = pendulum(l, t, init_angle, init_speed, n)
+    harm_angle, harm_speed = pendulum(l, t, init_angle, init_speed, n, harmonic=True)
+    animate_math_and_harm_pend(t, t_eval, l, math_angle, math_speed, harm_angle, harm_speed, filename="harm_math_pendulum_comparison_large_angle")
+
+
 def main():
-    plot_period_dependence_on_energy()
+    compare_math_harmonic_pendulum()
+    # plot_period_dependence_on_energy()
     # pendulum(1, 3, 0, 1, 150)
 
 if __name__ == '__main__':
