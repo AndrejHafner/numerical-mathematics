@@ -23,7 +23,7 @@ $$\frac{g}{l}\theta(t) + \theta''(t) = 0. $$
 The simple pendulum and harmonic oscillator are compared in the setting where the small angle assumption is satisfied.
 The initial angle and angular speed is the same for both pendulums.
 ![](./images/harm_math_pendulum_comparison_small_angle.gif)
-We can see that the pendulums act the same and that their speed and angle in equal in the defined timeframe (speed and angle curves overlap for each pendulum).
+We can see that the pendulums act the same and that their speed and angle in equal in the defined timeframe (speed and angle curves overlap for pendulums).
 
 In the next example the small angle assumption is broken.
 ![](./images/harm_math_pendulum_comparison_large_angle.gif)
