@@ -1,1 +1,1 @@
-# numerical-mathematics
+# Numerical mathematics homeworks
